@@ -1,9 +1,9 @@
 /*
  * pcboard.c
- * libansilove 1.4.2
+ * libansilove 1.4.4
  * https://www.ansilove.org
  *
- * Copyright (c) 2011-2025 Stefan Vogt, Brian Cassidy, and Frederic Cambus
+ * Copyright (c) 2011-2026 Stefan Vogt, Brian Cassidy, and Frederic Cambus
  * All rights reserved.
  *
  * libansilove is licensed under the BSD 2-Clause license.
@@ -100,7 +100,7 @@ ansilove_pcboard(struct ansilove_ctx *ctx, struct ansilove_options *options)
 	while (loop < ctx->length) {
 		cursor = &ctx->buffer[loop];
 
-		if (column == columns) {
+		if (column >= columns) {
 			row++;
 			column = 0;
 		}
@@ -115,7 +115,7 @@ ansilove_pcboard(struct ansilove_ctx *ctx, struct ansilove_options *options)
 			case CR:
 				break;
 			case TAB:
-				column += 8;
+				column += 8 - column % 8;
 				break;
 			case SUB:
 				state = STATE_END;

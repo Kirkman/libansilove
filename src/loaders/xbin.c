@@ -1,9 +1,9 @@
 /*
  * xbin.c
- * libansilove 1.4.2
+ * libansilove 1.4.4
  * https://www.ansilove.org
  *
- * Copyright (c) 2011-2025 Stefan Vogt, Brian Cassidy, and Frederic Cambus
+ * Copyright (c) 2011-2026 Stefan Vogt, Brian Cassidy, and Frederic Cambus
  * All rights reserved.
  *
  * libansilove is licensed under the BSD 2-Clause license.
@@ -96,7 +96,7 @@ ansilove_xbin(struct ansilove_ctx *ctx, struct ansilove_options *options)
 
 		if (offset + XBIN_PALETTE_LENGTH > ctx->length) {
 			ctx->error = ANSILOVE_FORMAT_ERROR;
-			return -1;
+			goto error;
 		}
 
 		for (loop = 0; loop < 16; loop++) {
@@ -122,14 +122,14 @@ ansilove_xbin(struct ansilove_ctx *ctx, struct ansilove_options *options)
 
 		if (offset + fontsz > ctx->length) {
 			ctx->error = ANSILOVE_FORMAT_ERROR;
-			return -1;
+			goto error;
 		}
 
 		/* allocate memory to contain the XBin font */
 		font_data_xbin = (uint8_t *)malloc(fontsz);
 		if (font_data_xbin == NULL) {
 			ctx->error = ANSILOVE_MEMORY_ERROR;
-			return -1;
+			goto error;
 		}
 
 		memcpy(font_data_xbin, ctx->buffer+offset, fontsz);
@@ -142,16 +142,14 @@ ansilove_xbin(struct ansilove_ctx *ctx, struct ansilove_options *options)
 		if (xbin_flags & 0x10) {
 			if (offset + fontsz > ctx->length) {
 				ctx->error = ANSILOVE_FORMAT_ERROR;
-				free(font_data_xbin);
-				return -1;
+				goto error;
 			}
 
 			/* allocate memory to contain the XBin font */
 			high_font_data_xbin = (uint8_t *)malloc(fontsz);
 			if (high_font_data_xbin == NULL) {
 				ctx->error = ANSILOVE_MEMORY_ERROR;
-				free(font_data_xbin);
-				return -1;
+				goto error;
 			}
 
 			memcpy(high_font_data_xbin, ctx->buffer+offset, fontsz);
@@ -184,13 +182,16 @@ ansilove_xbin(struct ansilove_ctx *ctx, struct ansilove_options *options)
 						offset += 2;
 					} else {
 						ctx->error = ANSILOVE_FORMAT_ERROR;
-						free(font_data_xbin);
-						free(high_font_data_xbin);
-						return -1;
+						goto error;
 					}
 				}
 				/* char */
 				else if (ctype == 0x40) {
+					if (offset + (character == -1) + 1 >
+					    ctx->length) {
+						ctx->error = ANSILOVE_FORMAT_ERROR;
+						goto error;
+					}
 					if (character == -1) {
 						character = ctx->buffer[offset];
 						offset++;
@@ -200,6 +201,11 @@ ansilove_xbin(struct ansilove_ctx *ctx, struct ansilove_options *options)
 				}
 				/* attr */
 				else if (ctype == 0x80) {
+					if (offset + (attribute == -1) + 1 >
+					    ctx->length) {
+						ctx->error = ANSILOVE_FORMAT_ERROR;
+						goto error;
+					}
 					if (attribute == -1) {
 						attribute = ctx->buffer[offset];
 						offset++;
@@ -209,6 +215,11 @@ ansilove_xbin(struct ansilove_ctx *ctx, struct ansilove_options *options)
 				}
 				/* both */
 				else {
+					if (offset + (character == -1) +
+					    (attribute == -1) > ctx->length) {
+						ctx->error = ANSILOVE_FORMAT_ERROR;
+						goto error;
+					}
 					if (character == -1) {
 						character = ctx->buffer[offset];
 						offset++;
@@ -222,7 +233,7 @@ ansilove_xbin(struct ansilove_ctx *ctx, struct ansilove_options *options)
 				background = (attribute & 240) >> 4;
 				foreground = attribute & 15;
 
-				if (xbin_flags & 0x10 && attribute & 8) {
+				if (high_font_data_xbin != NULL && attribute & 8) {
 					drawchar(canvas, high_font_data_xbin, 8, xbin_fontsize,
 					    column, row, colors[background],
 					    colors[foreground], character);
@@ -255,7 +266,7 @@ ansilove_xbin(struct ansilove_ctx *ctx, struct ansilove_options *options)
 			background = (attribute & 240) >> 4;
 			foreground = attribute & 15;
 
-			if (xbin_flags & 0x10 && attribute & 8) {
+			if (high_font_data_xbin != NULL && attribute & 8) {
 				drawchar(canvas, high_font_data_xbin, 8, xbin_fontsize,
 				    column, row, colors[background],
 				    colors[foreground], character);
@@ -283,4 +294,10 @@ ansilove_xbin(struct ansilove_ctx *ctx, struct ansilove_options *options)
 	free(high_font_data_xbin);
 
 	return 0;
+
+error:
+	gdImageDestroy(canvas);
+	free(font_data_xbin);
+	free(high_font_data_xbin);
+	return -1;
 }

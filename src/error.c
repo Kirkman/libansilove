@@ -1,9 +1,9 @@
 /*
  * error.c
- * libansilove 1.4.2
+ * libansilove 1.4.4
  * https://www.ansilove.org
  *
- * Copyright (c) 2011-2025 Stefan Vogt, Brian Cassidy, and Frederic Cambus
+ * Copyright (c) 2011-2026 Stefan Vogt, Brian Cassidy, and Frederic Cambus
  * All rights reserved.
  *
  * libansilove is licensed under the BSD 2-Clause license.
