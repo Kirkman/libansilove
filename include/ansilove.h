@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /* Version number */
-#define ANSILOVE_VERSION "1.4.4"
+#define ANSILOVE_VERSION "1.4.4-atari"
 
 #define ANSILOVE_VERSION_MAJOR		1
 #define ANSILOVE_VERSION_MINOR		4

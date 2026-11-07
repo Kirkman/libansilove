@@ -1,7 +1,10 @@
-# libansilove
+# libansilove (Atari ST fork)
 
 libansilove is a library to convert ANSi and artscene related file formats
 into PNG images.
+
+This fork adds support for the unique 4x8 font and color palettes used 
+by the Atari ST programs ANSIterm and FANSI in the early 1990s.
 
 # Dependencies
 
@@ -88,6 +91,8 @@ libansilove is released under the BSD 2-Clause license. See the file `LICENSE` f
 libansilove is developed by Stefan Vogt ([@ByteProject][17]), Brian Cassidy
 ([@bricas][18]) and Frederic Cambus ([@fcambus][19]).
 
+The changes in this Atari ST fork were made by Josh Renaud ([@Kirkman][20]).
+
 # Resources
 
 Project homepage: https://www.ansilove.org
@@ -113,3 +118,4 @@ GitHub: https://github.com/ansilove/libansilove
 [17]: https://github.com/ByteProject
 [18]: https://github.com/bricas
 [19]: https://github.com/fcambus
+[20]: https://github.com/kirkman
