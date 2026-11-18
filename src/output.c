@@ -1,6 +1,6 @@
 /*
  * output.c
- * libansilove 1.4.4
+ * libansilove 1.4.6
  * https://www.ansilove.org
  *
  * Copyright (c) 2011-2026 Stefan Vogt, Brian Cassidy, and Frederic Cambus
@@ -28,7 +28,7 @@ output(struct ansilove_ctx *ctx, struct ansilove_options *options,
 
 		if (!dos) {
 			ctx->error = ANSILOVE_GD_ERROR;
-			return -1;
+			goto error;
 		}
 
 		gdImageCopyResampled(dos, source, 0, 0, 0, 0,
@@ -42,7 +42,7 @@ output(struct ansilove_ctx *ctx, struct ansilove_options *options,
 	if (options->scale_factor) {
 		if (options->scale_factor < 2 || options->scale_factor > 8) {
 			ctx->error = ANSILOVE_RANGE_ERROR;
-			return -1;
+			goto error;
 		}
 
 		uint32_t width, height;
@@ -57,7 +57,7 @@ output(struct ansilove_ctx *ctx, struct ansilove_options *options,
 
 		if (!retina) {
 			ctx->error = ANSILOVE_GD_ERROR;
-			return -1;
+			goto error;
 		}
 
 		gdImageCopyResized(retina, source, 0, 0, 0, 0,
@@ -75,5 +75,15 @@ output(struct ansilove_ctx *ctx, struct ansilove_options *options,
 
 	gdImageDestroy(source);
 
+	if (ctx->png.buffer == NULL) {
+		ctx->png.length = 0;
+		ctx->error = ANSILOVE_GD_ERROR;
+		return -1;
+	}
+
 	return 0;
+
+error:
+	gdImageDestroy(source);
+	return -1;
 }

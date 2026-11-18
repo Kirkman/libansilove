@@ -1,6 +1,6 @@
 /*
  * icedraw.c
- * libansilove 1.4.4
+ * libansilove 1.4.6
  * https://www.ansilove.org
  *
  * Copyright (c) 2011-2026 Stefan Vogt, Brian Cassidy, and Frederic Cambus
@@ -133,7 +133,7 @@ ansilove_icedraw(struct ansilove_ctx *ctx, struct ansilove_options *options)
 	}
 
 	width = x2 * 8;
-	height = i / 2 / 80 * 16;
+	height = i / 2 / x2 * 16;
 
 	if (!width || !height) {
 		ctx->error = ANSILOVE_FORMAT_ERROR;

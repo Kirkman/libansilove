@@ -1,6 +1,6 @@
 /*
  * clean.c
- * libansilove 1.4.4
+ * libansilove 1.4.6
  * https://www.ansilove.org
  *
  * Copyright (c) 2011-2026 Stefan Vogt, Brian Cassidy, and Frederic Cambus
@@ -30,7 +30,9 @@ ansilove_clean(struct ansilove_ctx *ctx)
 	if (ctx->buffer != MAP_FAILED)
 		(void)munmap(ctx->buffer, ctx->maplen);
 
+	ctx->buffer = MAP_FAILED;
 	ctx->maplen = ctx->length = 0;
+	ctx->png.buffer = NULL;
 	ctx->png.length = 0;
 
 	return 0;

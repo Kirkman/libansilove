@@ -1,6 +1,6 @@
 /*
  * savefile.c
- * libansilove 1.4.4
+ * libansilove 1.4.6
  * https://www.ansilove.org
  *
  * Copyright (c) 2011-2026 Stefan Vogt, Brian Cassidy, and Frederic Cambus
@@ -33,7 +33,8 @@ ansilove_savefile(struct ansilove_ctx *ctx, const char *output)
 		goto err;
 
 	rw = fwrite(ctx->png.buffer, 1, ctx->png.length, file);
-	fclose(file);
+	if (fclose(file) != 0)
+		goto err;
 
 	if (rw != (size_t)ctx->png.length)
 		goto err;
