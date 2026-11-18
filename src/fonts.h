@@ -55,5 +55,6 @@ extern const uint8_t font_amiga_topaz_500[4096];
 extern const uint8_t font_amiga_topaz_500_plus[4096];
 
 extern const uint8_t font_atari_ansiterm[4096];
+extern const uint8_t font_atari_fansi[4096];
 
 #endif /* FONTS_H */

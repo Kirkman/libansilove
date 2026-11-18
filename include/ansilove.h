@@ -74,6 +74,7 @@ extern "C" {
 
 /* Atari fonts */
 #define ANSILOVE_FONT_ANSITERM		40
+#define ANSILOVE_FONT_FANSI			41
 
 /* Rendering modes */
 #define ANSILOVE_MODE_CED		1

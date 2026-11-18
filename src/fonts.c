@@ -41,6 +41,7 @@
 #include "fonts/font_amiga_topaz_500.h"
 #include "fonts/font_amiga_topaz_500_plus.h"
 #include "fonts/font_atari_ansiterm.h"
+#include "fonts/font_atari_fansi.h"
 
 
 void
@@ -177,6 +178,11 @@ select_font(struct fontStruct *fontData, int font)
 		break;
 	case ANSILOVE_FONT_ANSITERM:
 		fontData->font_data = font_atari_ansiterm;
+		fontData->width = 8;
+		fontData->height = 16;
+		break;
+	case ANSILOVE_FONT_FANSI:
+		fontData->font_data = font_atari_fansi;
 		fontData->width = 8;
 		fontData->height = 16;
 		break;
